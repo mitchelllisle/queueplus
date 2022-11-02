@@ -11,11 +11,15 @@ with open('requirements.txt') as f:
 with open('requirements/test.txt') as f:
     test_requirements = f.read().splitlines()
 
+with open('README.md') as f:
+    long_description = f.read()
+
 
 setup(
     author='Mitchell Lisle',
     author_email='m.lisle90@gmail.com',
-    description='My project',
+    description='A Python library that adds functionality to asyncio queues',
+    long_description=long_description,
     install_requires=requirements,
     include_package_data=True,
     keywords='queueplus',

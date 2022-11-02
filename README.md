@@ -4,4 +4,4 @@
 
 > ✍️ author: Mitchell Lisle
 
-My project
+A Python library that adds functionality to asyncio queues
