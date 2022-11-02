@@ -1,0 +1,7 @@
+Name                        Stmts   Miss  Cover
+-----------------------------------------------
+src/queueplus/__init__.py       3      0   100%
+src/queueplus/__main__.py       4      4     0%
+src/queueplus/logger.py         4      4     0%
+-----------------------------------------------
+TOTAL                          11      8    27%
