@@ -1,4 +1,4 @@
-FROM jupyter/scipy-notebook as serve
+FROM python:3.10-slim-buster as serve
 
 USER root
 RUN mkdir -p /source
@@ -17,17 +17,11 @@ WORKDIR /source
 RUN curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
   && python get-pip.py && rm get-pip.py
 
-RUN pip install virtualenv && \
-    virtualenv venv && \
-    source venv/bin/activate
-
-
 RUN make install
 
 USER queueplus-user
 
 #ENTRYPOINT ["queueplus"]
-
 
 FROM serve as test
 
