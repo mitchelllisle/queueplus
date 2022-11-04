@@ -20,6 +20,7 @@ setup(
     author_email='m.lisle90@gmail.com',
     description='A Python library that adds functionality to asyncio queues',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     install_requires=requirements,
     include_package_data=True,
     keywords='queueplus',

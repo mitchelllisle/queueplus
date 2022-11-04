@@ -14,7 +14,8 @@ pip install queueplus
 
 ## Usage
 
-You can use AioQueue with all the same functionality as a regular `asyncio.Queue`
+You can use AioQueue with all the same functionality as a regular `asyncio.Queue`.
+
 ```python
 from queueplus import AioQueue
 
