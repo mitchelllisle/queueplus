@@ -1,6 +1,12 @@
-import pytest
+from dataclasses import dataclass
+from datetime import date
 
-from queueplus.aioqueue import AioQueue
+import pytest
+from hypothesis import given
+from hypothesis.strategies import builds, characters, dates, integers, lists, text
+
+from queueplus.aioqueue import AioQueue, TypedAioQueue
+from queueplus.violations import DiscardOnViolation, RaiseOnViolation, ViolationError
 
 
 @pytest.mark.asyncio
@@ -78,3 +84,45 @@ def test_generator(ranged_message):
         assert count == message
         count += 1
     assert count == len(ranged_message)
+
+
+@given(vals=lists(integers()))
+@pytest.mark.asyncio
+async def test_typed_queue(vals):
+    inq = TypedAioQueue(int)
+    [await inq.put(message) for message in vals]
+    output = inq.collect()
+    assert output == vals
+
+
+@given(char=characters())
+@pytest.mark.asyncio
+async def test_typed_queue_raise_violation(char: str, ranged_message: list[int]):
+    inq = TypedAioQueue(int, violations_strategy=RaiseOnViolation)
+    with pytest.raises(ViolationError):
+        await inq.put(char)
+
+
+@given(chars=lists(characters()), ints=lists(integers()))
+@pytest.mark.asyncio
+async def test_typed_queue_discard_violation(chars: list[str], ints: list[int]):
+    inq = TypedAioQueue(int, violations_strategy=DiscardOnViolation)
+    vals = chars + ints
+    [await inq.put(val) for val in vals]
+    output = inq.collect()
+    assert output == ints
+
+
+@dataclass
+class User:
+    name: str
+    age: int
+    dob: date
+
+
+@given(user=builds(User, name=text(), age=integers(), dob=dates()))
+@pytest.mark.asyncio
+async def test_typed_queue_pydantic(user: User):
+    inq = TypedAioQueue(User, violations_strategy=RaiseOnViolation)
+    await inq.put(user)
+    assert inq.collect() == [user]
