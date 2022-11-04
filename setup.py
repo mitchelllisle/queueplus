@@ -31,6 +31,6 @@ setup(
     license='MIT license',
     tests_require=test_requirements,
     url='https://github.com/mitchelllisle/queueplus',
-    version='0.4.0',
+    version='0.5.0',
     zip_safe=False,
 )
