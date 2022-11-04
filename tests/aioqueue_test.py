@@ -6,7 +6,12 @@ from hypothesis import given
 from hypothesis.strategies import builds, characters, dates, integers, lists, text
 
 from queueplus.aioqueue import AioQueue, TypedAioQueue
-from queueplus.violations import DiscardOnViolation, RaiseOnViolation, ViolationError
+from queueplus.violations import (
+    DiscardOnViolation,
+    RaiseOnViolation,
+    ViolationError,
+    ViolationStrategy,
+)
 
 
 @pytest.mark.asyncio
@@ -126,3 +131,8 @@ async def test_typed_queue_pydantic(user: User):
     inq = TypedAioQueue(User, violations_strategy=RaiseOnViolation)
     await inq.put(user)
     assert inq.collect() == [user]
+
+
+def test_violation_strategy():
+    with pytest.raises(TypeError):
+        ViolationStrategy()
