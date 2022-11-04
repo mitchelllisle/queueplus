@@ -27,6 +27,17 @@ message = await q.get()
 
 With a few extra capabilities
 
+**Iterate over a queue (can be async or not)**
+```python
+from queueplus import AioQueue
+q = AioQueue()
+
+[await q.put(i) for i in range(10)] # in non-async mode you would call q.put_nowait
+
+async for row in q:
+    print(row)
+```
+
 **Collect all values into a list**
 ```python
 from queueplus import AioQueue
