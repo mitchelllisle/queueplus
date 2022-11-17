@@ -5,13 +5,23 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import builds, characters, dates, integers, lists, text
 
-from queueplus.aioqueue import AioQueue, TypedAioQueue
+from queueplus.aioqueue import AioQueue, BloomFilterQueue, TypedAioQueue
 from queueplus.violations import (
     DiscardOnViolation,
     RaiseOnViolation,
     ViolationError,
     ViolationStrategy,
 )
+
+
+@pytest.mark.asyncio
+async def test_bloom_filter_queue():
+    q = BloomFilterQueue(10)
+
+    assert q.item_exists('test') is False
+    await q.put('test')
+
+    assert q.item_exists('test') is True
 
 
 @pytest.mark.asyncio
