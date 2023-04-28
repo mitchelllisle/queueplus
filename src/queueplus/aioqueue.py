@@ -2,6 +2,8 @@ import asyncio
 from asyncio import Queue
 from typing import AsyncGenerator, Callable, Coroutine, Generator, Optional, Type, Union
 
+from bloom_filter import BloomFilter
+
 from queueplus.datatypes import DataT
 from queueplus.violations import RaiseOnViolation, ViolationStrategy
 
@@ -50,7 +52,21 @@ class TypedAioQueue(AioQueue):
         self._check_for_violation = violations_strategy()
         super().__init__()
 
-    def _put(self, item: dict):
+    def _put(self, item: DataT):
         new = self._check_for_violation.run(item, self._model)
         if new is not None:
             return super()._put(new)
+
+
+class BloomFilterQueue(AioQueue):
+    def __init__(self, max_elements: int, error_rate: float = 0.1):
+        self.bloom = BloomFilter(max_elements=max_elements, error_rate=error_rate)
+        super().__init__()
+
+    def item_exists(self, key: str) -> bool:
+        return key in self.bloom
+
+    def _put(self, item: DataT) -> None:
+        if item not in self.bloom:
+            self.bloom.add(item)
+            super()._put(item)
