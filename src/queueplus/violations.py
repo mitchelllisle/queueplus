@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Dict, Union
 
 from queueplus.datatypes import DataT
 
@@ -24,7 +24,7 @@ class ViolationStrategy(ABC):
     def _is_item_of_type(item: Any, model: DataT):
         return isinstance(item, model)
 
-    def run(self, item: Any, model: DataT) -> dict | DataT:
+    def run(self, item: Any, model: DataT) -> Union[Dict, DataT]:
         checked = self.checks(item, model)
         return checked
 
