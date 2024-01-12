@@ -1,6 +1,6 @@
 ##  QueuePlus ➕
 
-> 1️⃣ version: 0.5.2
+> 1️⃣ version: 0.6.0
 
 > ✍️ author: Mitchell Lisle
 

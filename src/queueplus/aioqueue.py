@@ -70,3 +70,13 @@ class BloomFilterQueue(AioQueue):
         if item not in self.bloom:
             self.bloom.add(item)
             super()._put(item)
+
+
+class ConditionalQueue(AioQueue):
+    def __init__(self, check: Callable[[DataT], bool]):
+        self._checker = check
+        super().__init__()
+
+    def _put(self, item: DataT):
+        if self._checker(item):
+            return super()._put(item)

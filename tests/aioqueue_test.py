@@ -5,13 +5,22 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import builds, characters, dates, integers, lists, text
 
-from queueplus.aioqueue import AioQueue, BloomFilterQueue, TypedAioQueue
+from queueplus.aioqueue import AioQueue, BloomFilterQueue, ConditionalQueue, TypedAioQueue
 from queueplus.violations import (
     DiscardOnViolation,
     RaiseOnViolation,
     ViolationError,
     ViolationStrategy,
 )
+
+
+@pytest.mark.asyncio
+async def test_conditional_queue():
+    q = ConditionalQueue(lambda x: x > 1)
+    await q.put(2)
+    await q.put(1)
+    assert len(q) == 1
+    assert await q.get() == 2
 
 
 @pytest.mark.asyncio
