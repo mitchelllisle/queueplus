@@ -1,8 +1,8 @@
 Name                          Stmts   Miss  Cover
 -------------------------------------------------
 src/queueplus/__init__.py         5      0   100%
-src/queueplus/aioqueue.py        56      0   100%
+src/queueplus/aioqueue.py        69      0   100%
 src/queueplus/datatypes.py        2      0   100%
 src/queueplus/violations.py      26      1    96%
 -------------------------------------------------
-TOTAL                            89      1    99%
+TOTAL                           102      1    99%

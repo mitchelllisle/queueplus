@@ -5,13 +5,43 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import builds, characters, dates, integers, lists, text
 
-from queueplus.aioqueue import AioQueue, BloomFilterQueue, ConditionalQueue, TypedAioQueue
+from queueplus.aioqueue import (
+    AioQueue,
+    BloomFilterQueue,
+    ConditionalQueue,
+    TypedAioQueue,
+    UniqueQueue,
+)
 from queueplus.violations import (
     DiscardOnViolation,
     RaiseOnViolation,
     ViolationError,
     ViolationStrategy,
 )
+
+
+@pytest.mark.asyncio
+async def test_unique_queue():
+    q = UniqueQueue()
+    await q.put(1)
+    assert await q.get() == 1
+
+    n = 10_000
+    [await q.put(i) for i in range(n)]
+    [await q.put(i) for i in range(n)]
+    assert len(q) == n
+
+
+@pytest.mark.asyncio
+async def test_unique_queue_retain():
+    q = UniqueQueue(remove_on_get=False)
+    await q.put(1)
+    assert await q.get() == 1
+
+    n = 10_000
+    [await q.put(i) for i in range(n)]
+    [await q.put(i) for i in range(n)]
+    assert len(q) == n - 1  # because we already `put` 1 before the first range
 
 
 @pytest.mark.asyncio

@@ -1,6 +1,6 @@
 import asyncio
 from asyncio import Queue
-from typing import AsyncGenerator, Callable, Coroutine, Generator, Optional, Type, Union
+from typing import AsyncGenerator, Callable, Coroutine, Generator, Optional, Set, Type, Union
 
 from bloom_filter import BloomFilter
 
@@ -80,3 +80,20 @@ class ConditionalQueue(AioQueue):
     def _put(self, item: DataT):
         if self._checker(item):
             return super()._put(item)
+
+
+class UniqueQueue(AioQueue):
+    def __init__(self, remove_on_get: bool = True):
+        super().__init__()
+        self._remove_on_get = remove_on_get
+        self._seen: Set[DataT] = set()
+
+    def _put(self, item: DataT):
+        if item not in self._seen:
+            self._seen.add(item)
+            return super()._put(item)
+
+    def _get(self):
+        item = super()._get()
+        self._seen.remove(item) if self._remove_on_get else None
+        return item
