@@ -1,8 +1,7 @@
 ##  QueuePlus ➕
 
-> 1️⃣ version: 0.7.0
+[![PyPI version](https://badge.fury.io/py/queueplus.svg)](https://badge.fury.io/py/queueplus)
 
-> ✍️ author: Mitchell Lisle
 
 A Python library that adds functionality to asyncio queues
 
